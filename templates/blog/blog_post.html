@@ -2,9 +2,15 @@
 
 
 {% block title %}Blog - post{% endblock title %}
-
+{% block blogactive %}active{% endblock blogactive %}
 {% block body %}
-<img src="" alt="">
-<img src="" alt="">
-<img src="" alt="">
+<div class="container my-4">
+    <div class="blog-post">
+        <h2 class="blog-post-title">{{ post.title }}</h2>
+        <p class="blog-post-meta">Published on {{ post.timeStamp }} by <a href="#">{{ post.author }}</a></p>
+        <p>{{post.content}}</p>
+        <hr>
+    </div>
+
+</div>
 {% endblock body %}

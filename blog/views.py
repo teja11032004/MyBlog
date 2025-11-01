@@ -8,5 +8,9 @@ def blog_home(request):
     content={'posts': allposts}
     return render(request, 'blog/blog_page.html', content)
 
+
+
 def blog_post(request, slug):
-    return render(request, 'blog/blog_page.html', {'slug': slug})
+    post_item = post.objects.filter(slug=slug).first()
+    context = {'post': post_item}
+    return render(request, 'blog/blog_post.html', context)
