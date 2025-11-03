@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 from home.models import Contact
 from django.contrib import messages
 from blog.models import post
+from django.db.models import Q
 
 
 # Create your views here.
@@ -34,7 +35,15 @@ def contact(request):
 # Create your views here.
 def search(request):
     query = request.GET.get('query', '')
-
-    allposts = post.objects.filter(title__icontains=query)
+    if len(query) > 78:
+        allposts = post.objects.none()
+    else:
+        allposts = post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(author__icontains=query)
+        )
+    if allposts.count() == 0:
+        messages.warning(request, "No search results found. Please refine your query.")    
     params = {'posts': allposts, 'query': query}
     return render(request, 'home/search.html', params)

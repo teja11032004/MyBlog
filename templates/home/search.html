@@ -8,32 +8,37 @@
 <h3>searched blogs</h3>
 <div class="container my-4">
   {% if posts %}
-  <div class="row">
-    {% for allposts in posts %}
-      <div class="col-md-6 mb-4">
-        <div class="border rounded shadow-sm h-100 p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-primary-emphasis">
-            {{ allposts.author }}
-          </strong>
-          <h3 class="mb-0">{{ allposts.title }}</h3>
-          <div class="mb-1 text-body-secondary">
-            {{ allposts.timeStamp|date:"M d, Y" }}
-          </div>
-          <p class="card-text mb-auto">
-            {{ allposts.content|truncatewords:30 }}
-          </p>
-          <a href="#" class="stretched-link fw-semibold text-decoration-none">
-            Continue reading →
-          </a>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-{% else %}
-  <p class="text-muted text-center mt-4">No results found for "{{ query }}"</p>
-{% endif %}
+    <p>About {{ posts|length }} results found for "{{ query }}"</p>
+    {% if posts|length == 0 %}
+      <p class="text-muted">No results found for "{{ query }}"</p>
+    {% endif %}
 
+    <div class="row">
+      {% for allposts in posts %}
+        <div class="col-md-6 mb-4">
+          <div class="border rounded shadow-sm h-100 p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary-emphasis">
+              {{ allposts.author }}
+            </strong>
+            <h3 class="mb-0">{{ allposts.title }}</h3>
+            <div class="mb-1 text-body-secondary">
+              {{ allposts.timeStamp|date:"M d, Y" }}
+            </div>
+            <p class="card-text mb-auto">
+              {{ allposts.content|truncatewords:30 }}
+            </p>
+            <a href="#" class="stretched-link fw-semibold text-decoration-none">
+              Continue reading →
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted text-center mt-4">No results found for "{{ query }}"</p>
+  {% endif %}
 </div>
+
 
     
 
