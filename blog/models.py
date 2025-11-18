@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class post(models.Model):
-    sno = models.AutoField
+    sno = models.AutoField(primary_key=True)
     author = models.CharField(max_length=200)
     title = models.CharField(max_length=100)
     slug=models.CharField(max_length=100)

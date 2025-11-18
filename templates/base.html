@@ -57,7 +57,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content shadow-lg border-0 rounded-3">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="contactModalLabel">Contact Us</h5>
+        <h5 class="modal-title" id="contactModalLabel">Login Here</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       
@@ -90,7 +90,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" class="btn btn-primary">LogIn</button>
       </div>
     </div>
   </div>
@@ -101,15 +101,19 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content shadow-lg border-0 rounded-3">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="contactModalLabel">Contact Us</h5>
+        <h5 class="modal-title" id="contactModalLabel">Sign In </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       
       <div class="modal-body">
-        <form method="POST" action="/contact">
+        <form method="POST" action="{% url 'signup' %}">
           {% csrf_token %}
           
           <div class="row g-3">
+            <div class="col-md-6">
+              <label for="username" class="form-label">UserName </label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="UserName" required>
+            </div>
             <div class="col-md-6">
               <label for="fname" class="form-label">First Name </label>
               <input type="text" class="form-control" id="fname" name="name" placeholder="First Name" required>
@@ -129,7 +133,7 @@
             </div>
             <div class="col-md-6">
               <label for="inpuPassword" class="form-label">Confirm Password</label>
-              <input type="password" class="form-control" id="inpuPassword" name="password" placeholder="Confirm password" required>
+              <input type="password" class="form-control" id="inpuPassword" name="password1" placeholder="Confirm password" required>
             </div>
 
       
@@ -141,13 +145,14 @@
               I agree to the terms and conditions
             </label>
           </div>
+          <button type="submit" class="btn btn-success px-4">SignIn</button>
         
             
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success px-4">lOGIN</button>
+        
         
       </div>
     </div>
@@ -166,7 +171,7 @@
     <div class="container">
 
 
-    {% block body %}{% endblock body %}
+       {% block body %}{% endblock body %}
     </div>
 
     <!-- Optional JavaScript -->
