@@ -15,7 +15,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">MyBlo</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -40,14 +40,25 @@
     </ul>
     <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'search' %}">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" id="query">
-      <button class="btn btn-outline-success my-2 my-sm-0 mx-2" type="submit">Search</button>
+      <button class="btn btn-outline-primary my-2 my-sm-0 mx-2" type="submit">Search</button>
     </form>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#logModal">
+    {% if user.is_authenticated %}
+    <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Welcome,{{request.user}}
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          </ul>
+        </div>
+    {% else %}
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#logModal">
           Log In
     </button>
-    <button type="button" class="btn btn-success mx-2" data-bs-toggle="modal" data-bs-target="#signModal">
+    <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#signModal">
           Sign In
     </button>
+    {% endif %}
 
 
   </div>
@@ -62,17 +73,18 @@
       </div>
       
       <div class="modal-body">
-        <form>
+        <form method="POST" action='/login'>
+          {%csrf_token%}
           <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+            <label for="loginuser" class="col-sm-2 col-form-label">username </label>
             <div class="col-sm-10">
-              <input type="email" class="form-control" id="inputEmail3">
+              <input type="text" class="form-control" id="loginuser" name="username5">
             </div>
           </div>
           <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+            <label for="loginpassword" class="col-sm-2 col-form-label">Password</label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" id="inputPassword3">
+              <input type="password" class="form-control" id="loginpassword" name="password5">
             </div>
           </div>
           <div class="row mb-3">
@@ -85,13 +97,12 @@
               </div>
             </div>
           </div>
+          <button type="submit" class="btn btn-primary">LogIn</button>
           
         </form>
       </div>
 
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">LogIn</button>
-      </div>
+      
     </div>
   </div>
 </div>

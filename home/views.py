@@ -4,6 +4,7 @@ from django.contrib import messages
 from blog.models import post
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
 
 
 
@@ -81,3 +82,21 @@ def signup(request):
     else:
         return HttpResponse("Error Please Try Again")
     
+def blogLogin(request):
+    if request.method=="POST":
+        loginuser = request.POST.get('username5')
+        loginpassword = request.POST.get('password5')
+        user = authenticate(username=loginuser,password=loginpassword)
+        if user is None:
+            messages.error(request,"Invalid Credientials,Please Check and Retry")
+            return redirect('home')
+        else:
+            login(request,user)
+            messages.success(request," Yayyah successfullly logged In")
+            return redirect('home')
+    return HttpResponse("Error 404 - Not Found")
+
+def blogLogout(request):
+    logout(request)
+    messages.success(request,"Successfully Loged Out")
+    return redirect('home')
