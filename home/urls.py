@@ -10,4 +10,4 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("login", views.blogLogin, name="blogLogin"),
     path("logout", views.blogLogout, name="blogLogout"),  # ✅ removed leading slash
-]
+] 
