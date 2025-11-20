@@ -1,16 +1,148 @@
-{% extends 'base.html' %}
-
-
+{% extends 'base.html' %} 
 {% block title %}Blog - post{% endblock title %}
-{% block blogactive %}active{% endblock blogactive %}
-{% block body %}
+{% block blogactive %}active{% endblock blogactive %} 
+{% block body %} 
+{% load humanize %}
 <div class="container my-4">
-    <div class="blog-post">
-        <h2 class="blog-post-title">{{ post.title }}</h2>
-        <p class="blog-post-meta">Published on {{ post.timeStamp }} by <a href="#">{{ post.author }}</a></p>
-        <p>{{post.content}}</p>
-        <hr>
-    </div>
-
+  <div class="blog-post">
+    <h2 class="blog-post-title">{{ post.title }}</h2>
+    <p class="blog-post-meta">
+      Published on {{ post.timeStamp }} by <a href="#">{{ post.author }}</a>
+    </p>
+    <p>{{post.content}}</p>
+    <hr />
+  </div>
 </div>
+<div class="container mt-5">
+  <!-- Comment Section Card -->
+  <div class="card shadow-sm border-0 mb-5" style="border-radius: 15px">
+    <div class="card-body p-4">
+      <!-- Title -->
+      <h4 class="mb-4 fw-bold">💬 Comments ({{ comments|length }})</h4>
+
+      <!-- Comment Form -->
+      {% if user.is_authenticated %}
+      <form
+        action="{% url 'add_comment' post.slug %}"
+        method="POST"
+        class="mb-4"
+      >
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <textarea
+            class="form-control form-control-lg"
+            name="comment"
+            rows="3"
+            placeholder="Write your comment..."
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary px-4">
+          <i class="bi bi-send"></i> Submit
+        </button>
+      </form>
+      {% else %}
+      <div class="alert alert-warning">
+        Please <a href="/">login</a> to write a comment.
+      </div>
+      {% endif %}
+
+      <hr />
+
+      <!-- Comment List -->
+      <ul class="list-group list-group-flush mt-3">
+        {% for c in comments %}
+        <li class="list-group-item px-0 py-3">
+          <div class="d-flex gap-3">
+            <!-- Avatar -->
+            <div
+              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm"
+              style="
+                width: 48px;
+                height: 48px;
+                font-size: 18px;
+                font-weight: 600;
+              "
+            >
+              {{ c.user.username|first|upper }}
+            </div>
+
+            <div class="flex-grow-1">
+              <!-- Name + time -->
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0">{{ c.user.username }}</h6>
+                <small class="text-muted">{{ c.timestamp|naturaltime }}</small>
+              </div>
+
+              <p class="mt-2 mb-2">{{ c.comment }}</p>
+
+              <!-- Reply Button -->
+              <button
+                class="btn btn-light btn-sm border rounded-pill px-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#reply{{c.pk}}"
+              >
+                Reply
+              </button>
+
+              <!-- Reply Form -->
+              <div class="collapse mt-3" id="reply{{c.pk}}">
+                <form method="POST" action="{% url 'post_reply' c.pk %}">
+                  {% csrf_token %}
+                  <textarea
+                    name="reply_text"
+                    class="form-control mb-2"
+                    rows="2"
+                    placeholder="Write a reply..."
+                  ></textarea>
+                  <button class="btn btn-primary btn-sm rounded-pill px-3">
+                    Submit
+                  </button>
+                </form>
+              </div>
+
+              <!-- Show Replies -->
+              {% if c.replies.all %}
+              <div class="mt-3 ms-4">
+                {% for r in c.replies.all %}
+                <div class="d-flex mb-3">
+                  <!-- Reply Avatar -->
+                  <div
+                    class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                    style="
+                      width: 35px;
+                      height: 35px;
+                      font-size: 14px;
+                      font-weight: 600;
+                    "
+                  >
+                    {{ r.user.username|first|upper }}
+                  </div>
+
+                  <div class="ms-3">
+                    <h6 class="fw-bold mb-0" style="font-size: 0.9rem">
+                      {{ r.user.username }}
+                      <small class="text-muted" style="font-size: 0.75rem"
+                        >· {{ r.timestamp|naturaltime }}</small
+                      >
+                    </h6>
+
+                    <p class="mb-1" style="font-size: 0.9rem">{{ r.reply }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
 {% endblock body %}

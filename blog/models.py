@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.timezone import now
-from pickle import TRUE
+
 # Create your models here.
 class post(models.Model):
     sno = models.AutoField(primary_key=True)
@@ -16,10 +15,24 @@ class post(models.Model):
     
 
 
-class BlogComments(models.Model):
-    sno=models.AutoField(primary_key=True)
-    comment=models.TextField()
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    post=models.ForeignKey('post',on_delete=models.CASCADE)
-    parent=models.ForeignKey('self',on_delete=models.CASCADE,null=TRUE)
-    timestamp=models.DateTimeField(default=now)
+
+
+class Comment(models.Model):
+    roll=models.AutoField(primary_key=True)
+    post = models.ForeignKey(post, on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.user.username}"
+
+
+class Reply(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="replies")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reply = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Reply by {self.user.username}"
